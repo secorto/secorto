@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Package managers
+.pnpm-store/
+.pnpm-workspace-state*
+
+# Build output
+dist/
+build/
+coverage/
+
+# Cache
+.cache/
+.temp/
+.tmp/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*
+
+# IDEs
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+playwright-report/
+test-results/
+
+# TypeScript
+*.tsbuildinfo
