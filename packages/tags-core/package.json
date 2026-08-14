@@ -1,0 +1,10 @@
+{
+"name": "@secorto/tags-core",
+"version": "0.0.1",
+"description": "Framework-agnostic tagging domain",
+  "type": "module",
+  "license": "MIT",
+  "dependencies": {
+    "@secorto/i18n-core": "workspace:*"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@secorto/astro-tags",
+  "version": "0.0.1",
+  "description": "Astro integration for tag pages",
+  "type": "module",
+  "license": "MIT",
+  "dependencies": {
+    "@secorto/tags-core": "workspace:*",
+    "@secorto/i18n-core": "workspace:*"
+  }
+}
