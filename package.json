@@ -1,5 +1,5 @@
 {
-  "name": "secorto",
+  "name": "@secorto/workspace",
   "version": "0.0.1",
   "description": "",
   "scripts": {
@@ -16,5 +16,5 @@
     }
   },
   "type": "module",
-  "private": "true"
+  "private": true
 }

@@ -206,3 +206,26 @@ settings:
 importers:
 
   .: {}
+
+  packages/astro-i18n:
+    dependencies:
+      '@secorto/i18n-core':
+        specifier: workspace:*
+        version: link:../i18n-core
+
+  packages/astro-tags:
+    dependencies:
+      '@secorto/i18n-core':
+        specifier: workspace:*
+        version: link:../i18n-core
+      '@secorto/tags-core':
+        specifier: workspace:*
+        version: link:../tags-core
+
+  packages/i18n-core: {}
+
+  packages/tags-core:
+    dependencies:
+      '@secorto/i18n-core':
+        specifier: workspace:*
+        version: link:../i18n-core
