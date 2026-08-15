@@ -7,14 +7,22 @@ export type SectionRoutes<
   Section extends string,
   Language extends string
 > = Brand<'SectionRoutes', SectionDictionary<Section, Language, string >>
-/**
- * Validates that there are no duplicated routes for the same locale and slug across different sections.
- * If a duplicate is found, an error is thrown.
- * @template Section - The type of the section (e.g., 'blog', 'docs').
- * @template Language - The type of the language code (e.g., 'es', 'en').
- * @param routes Routes to be validated
- */
 
+/**
+ * Constructs a nominal SectionRoutes value from a raw SectionDictionary.
+ * 
+ * This function enforces the domain invariants for localized section routes:
+ * - each (locale, slug) pair must be unique across all sections
+ * - the resulting value is branded as 'SectionRoutes'
+ *
+ * If any invariant is violated, an error is thrown and the SectionRoutes value
+ * is not constructed.
+ *
+ * @template Section - The section keys (e.g., 'blog', 'docs').
+ * @template Language - The language codes (e.g., 'es', 'en').
+ * @param routes Raw dictionary of localized slugs per section.
+ * @returns A branded SectionRoutes value.
+ */
 export function sectionRoutes<
   Section extends string,
   Language extends string
