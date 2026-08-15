@@ -1,42 +1,76 @@
-export type TranslationGroup<
-  Language extends string,
-  Entry
-> = Partial<Record<Language, Entry>>
-
-export type TranslationIndex<
-  Language extends string,
-  Entry
-> = Record<
-  string, // translationKey
-  TranslationGroup<Language, Entry>
->
-
-export interface TranslationReference<
-  Language extends string
+/**
+ * Represents a localized entry in the translation system.
+ * @template T - The type of the content (e.g., { title: string, body: string }).
+ * @template C - The section of the application (e.g., 'blog', 'docs').
+ * @template L - The language code (e.g., 'es', 'en').
+ */
+export interface LocalizedEntry<
+  T,
+  C extends string,
+  L extends string,
+  K extends string
 > {
-  translationKey: string
-  locale: Language
+  cleanId: string
+  translationKey: K
+  locale: L
+  section: C
+  entry: T
 }
 
+/**
+ * Represents a translation index that groups localized entries by their translation key and locale.
+ * @template K - The type of the translation key (e.g., 'welcomeMessage').
+ * @template L - The type of the language code (e.g., 'es', 'en').
+ * @template T - The type of the content (e.g., { title: string, body: string }).
+ * @template C - The section of the application (e.g., 'blog', 'docs').
+ */
+export type TranslationIndex<
+  K extends string,
+  L extends string,
+  T,
+  C extends string
+> = Record<K, Partial<Record<L, LocalizedEntry<T, C, L, K>>>>
+
+/**
+ * Builds a translation index from an array of localized entries.
+ * The index groups entries by their translation key and locale.
+ * If duplicate entries for the same translation key and locale are found, an error is thrown.
+ * @template T - The type of the content (e.g., { title: string, body: string }).
+ * @template C - The section of the application (e.g., 'blog', 'docs').
+ * @template L - The language code (e.g., 'es', 'en').
+ * @param entries Entries to index
+ * @returns The translation index, grouped by translation key and locale
+ * @throws Error if duplicate entries for the same translation key and locale are found
+ */
 export function buildTranslationIndex<
-  Language extends string,
-  Entry extends TranslationReference<Language>
+  K extends string,
+  L extends string,
+  T,
+  C extends string
 >(
-  entries: readonly Entry[]
-): TranslationIndex<Language, Entry> {
-  const index: TranslationIndex<Language, Entry> = {}
+  entries: readonly LocalizedEntry<T, C, L, K>[]
+): TranslationIndex<K, L, T, C> {
+  // Using map to safely mutate internally without lying to TypeScript
+  const map = new Map<K, Partial<Record<L, LocalizedEntry<T, C, L, K>>>>()
 
   for (const entry of entries) {
-    const group = index[entry.translationKey] ??= {}
+    const key = entry.translationKey
 
-    if (group[entry.locale]) {
+    if (!map.has(key)) {
+      map.set(key, Object.create(null))
+    }
+    
+    const group = map.get(key)!
+
+    if (Object.hasOwn(group, entry.locale)) {
       throw new Error(
-        `Duplicate translation for key "${entry.translationKey}" and locale "${entry.locale}"`
+        `Duplicate translation for key "${key}" and locale "${entry.locale}"`
       )
     }
 
     group[entry.locale] = entry
   }
 
-  return index
+  // Object.fromEntries casts natively and implicitly to Record<K, V>
+  return Object.fromEntries(map) as TranslationIndex<K, L, T, C>
 }

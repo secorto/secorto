@@ -24,7 +24,7 @@ describe('getSectionURL', () => {
   })
 })
 
-describe('getEntryUrl', ()=> {
+describe('getEntryURL', ()=> {
   it('getEntryURL builds full url for entry with locale prefix', () => {
     expect(getEntryURL(routes, 'blog', 'es', 'my-post')).toBe('/es/blog/my-post')
     expect(getEntryURL(routes, 'talk', 'en', 'my-talk')).toBe('/en/talk/my-talk')

@@ -1,4 +1,4 @@
-import { SectionDictionary } from "./dictionary"
+import { SectionDictionary } from './dictionary'
 
 /**
  * Localized route slugs per section.
@@ -35,7 +35,7 @@ export function getSectionURL<
   routes: SectionRoutes<Section, Language>,
   section: Section,
   locale: Language
-): string{
+): string {
   return `/${locale}/${getSectionRoute(routes, section, locale)}`
 }
 
