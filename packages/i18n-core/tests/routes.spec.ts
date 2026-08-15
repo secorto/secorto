@@ -31,7 +31,7 @@ describe('getEntryURL', ()=> {
   })
 })
 
-describe('validateDuplicatedRoutes', () => {
+describe('sectionRoutes', () => {
   it('throws an error when duplicate routes are found', () => {
     const duplicateRoutes = {
       blog: {
