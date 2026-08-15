@@ -10,7 +10,7 @@ const routes = {
     es: 'charla',
     en: 'talk'
   }
-} satisfies SectionRoutes<string, 'en'|'es'>
+} satisfies SectionRoutes<'blog'|'talk', 'en'|'es'>
 
 describe('getSectionURL', () => {
   it('builds localized section urls', () => {

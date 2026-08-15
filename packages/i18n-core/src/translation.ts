@@ -3,6 +3,7 @@
  * @template T - The type of the content (e.g., { title: string, body: string }).
  * @template C - The section of the application (e.g., 'blog', 'docs').
  * @template L - The language code (e.g., 'es', 'en').
+ * @template K - The translation key for the entry (e.g., 'welcomeMessage').
  */
 export interface LocalizedEntry<
   T,
