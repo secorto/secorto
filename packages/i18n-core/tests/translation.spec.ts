@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildTranslationIndex, LocalizedEntry } from '@secorto/i18n-core'
+import { buildTranslationIndex, langFromString, LocalizedEntry } from '@secorto/i18n-core'
 
 type TestLocales = 'es' | 'en' | 'fr'
 type TestContent = { text: string }
@@ -14,7 +14,7 @@ type TestContent = { text: string }
 function createEntry<K extends string>(
   translationKey: K,
   locale: TestLocales,
-): LocalizedEntry<TestContent, 'guides', TestLocales, K> {
+): LocalizedEntry<TestContent, 'guides', TestLocales> {
   return {
     cleanId: 'default-id',
     section: 'guides',
@@ -57,9 +57,26 @@ describe('buildTranslationIndex', () => {
     const entry = createEntry('existing-key', 'es')
     const index = buildTranslationIndex([entry])
 
-    // @ts-expect-error - Property 'missing-key' should not exist
     const missingGroup = index['missing-key']
-    
+
     expect(missingGroup).toBeUndefined()
+  })
+})
+
+describe('langFromString', () => {
+  const languages = ['en', 'es', 'fr'] as const
+
+  for (const k of languages) {
+    it(`validates that langFromString returns ${k} for input "${k}"`, () => {
+      expect(langFromString(k, languages)).toBe(k)
+    })
+  }
+
+  it('an invalid value throws an error', () => {
+    expect(() => langFromString('xx', languages)).toThrow('Invalid language: xx')
+  })
+  
+  it('undefined or unsafe values throw an error', () => {
+    expect(() => langFromString(undefined, languages)).toThrow('Invalid language: undefined')
   })
 })
