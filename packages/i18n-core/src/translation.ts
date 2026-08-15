@@ -55,20 +55,21 @@ export function buildTranslationIndex<
 
   for (const entry of entries) {
     const key = entry.translationKey
+    const locale = entry.locale
 
-    if (!map.has(key)) {
-      map.set(key, Object.create(null))
-    }
-    
-    const group = map.get(key)!
-
-    if (Object.hasOwn(group, entry.locale)) {
+    // Get or create the group for this key
+    let group = map.get(key)
+    if (!group) {
+      group = {}
+      map.set(key, group)
+    } else if (locale in group) {
       throw new Error(
-        `Duplicate translation for key "${key}" and locale "${entry.locale}"`
+        `Duplicate translation for key "${key}" and locale "${locale}"`
       )
     }
 
-    group[entry.locale] = entry
+    // Assign directly to the entry
+    group[locale] = entry
   }
 
   // Object.fromEntries casts natively and implicitly to Record<K, V>
