@@ -23,4 +23,9 @@ export type SectionDictionary<
   LocalizedValue<Language, TValue>
 >
 
+/**
+ * Represents a branded type for section routes, ensuring type safety.
+ * @template K - The brand key (e.g., 'SectionRoutes').
+ * @template T - The underlying type (e.g., SectionDictionary).
+ */
 export type Brand<K, T> = T & { __brand: K }
