@@ -22,3 +22,5 @@ export type SectionDictionary<
   Section,
   LocalizedValue<Language, TValue>
 >
+
+export type Brand<K, T> = T & { __brand: K }
