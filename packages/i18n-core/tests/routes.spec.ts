@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { getEntryURL, getSectionURL, sectionRoutes } from '@secorto/i18n-core'
+import { createSectionRoutes } from '@secorto/i18n-core'
 
-const routes = sectionRoutes({
+const routes = createSectionRoutes({
   blog: {
     es: 'blog',
     en: 'blog'
@@ -15,19 +15,19 @@ const routes = sectionRoutes({
 describe('getSectionURL', () => {
   it('builds localized section urls', () => {
     expect(
-      getSectionURL(routes, 'talk', 'es')
+      routes.getSectionURL('talk', 'es')
     ).toBe('/es/charla')
 
     expect(
-      getSectionURL(routes, 'talk', 'en')
+      routes.getSectionURL('talk', 'en')
     ).toBe('/en/talk')
   })
 })
 
 describe('getEntryURL', ()=> {
   it('getEntryURL builds full url for entry with locale prefix', () => {
-    expect(getEntryURL(routes, 'blog', 'es', 'my-post')).toBe('/es/blog/my-post')
-    expect(getEntryURL(routes, 'talk', 'en', 'my-talk')).toBe('/en/talk/my-talk')
+    expect(routes.getEntryURL('blog', 'es', 'my-post')).toBe('/es/blog/my-post')
+    expect(routes.getEntryURL('talk', 'en', 'my-talk')).toBe('/en/talk/my-talk')
   })
 })
 
@@ -45,7 +45,7 @@ describe('sectionRoutes', () => {
     }
 
     expect(() => {
-      sectionRoutes(duplicateRoutes)
+      createSectionRoutes(duplicateRoutes)
     }).toThrow(
       'Duplicated route for locale "es" and slug "blog" between sections "blog" and "talk".'
     )

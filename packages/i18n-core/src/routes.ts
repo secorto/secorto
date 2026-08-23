@@ -1,12 +1,54 @@
 import { SectionDictionary, Brand } from './dictionary'
 
 /**
- * Localized route slugs per section.
+ * Value object that encapsulates localized slugs per section and exposes
+ * a stable API for building localized URLs.
+ *
+ * Invariants:
+ * - Each (locale, slug) pair must be unique across all sections.
+ * - The object is constructed exclusively through `createSectionRoutes`.
+ *
+ * @template Section - Section keys (e.g., 'blog', 'talk').
+ * @template Language - Locale keys (e.g., 'es', 'en').
  */
-export type SectionRoutes<
+export interface SectionRoutes<
   Section extends string,
   Language extends string
-> = Brand<'SectionRoutes', SectionDictionary<Section, Language, string >>
+> {
+  /**
+   * Raw dictionary of localized slugs per section.
+   * This structure is immutable once the value object is created.
+   */
+  readonly routes: Record<Section, Record<Language, string>>
+
+  /**
+   * Returns the localized slug for a section.
+   *
+   * @param section Section identifier.
+   * @param locale Locale identifier.
+   * @returns Localized slug for the section.
+   */
+  getSectionRoute(section: Section, locale: Language): string
+
+  /**
+   * Returns the localized URL for a section, including locale prefix.
+   *
+   * @param section Section identifier.
+   * @param locale Locale identifier.
+   * @returns URL string for the section in the given locale.
+   */
+  getSectionURL(section: Section, locale: Language): string
+
+  /**
+   * Returns the localized URL for a content entry inside a section.
+   *
+   * @param section Section identifier.
+   * @param locale Locale identifier.
+   * @param slug Entry slug.
+   * @returns Full URL for the entry.
+   */
+  getEntryURL(section: Section, locale: Language, slug: string): string
+}
 
 /**
  * Constructs a nominal SectionRoutes value from a raw SectionDictionary.
@@ -23,11 +65,13 @@ export type SectionRoutes<
  * @param routes Raw dictionary of localized slugs per section.
  * @returns A branded SectionRoutes value.
  */
-export function sectionRoutes<
+export function createSectionRoutes<
   Section extends string,
   Language extends string
->(routes: SectionDictionary<Section, Language, string >): SectionRoutes<Section, Language> {
-  const seen = new Map<string, Section>() // key = `${locale}:${slug}`
+>(
+  routes: SectionDictionary<Section, Language, string>
+): SectionRoutes<Section, Language> {
+  const seen = new Map<string, Section>()
 
   for (const section in routes) {
     const localized = routes[section]
@@ -46,47 +90,24 @@ export function sectionRoutes<
       seen.set(key, section)
     }
   }
-  return {...routes, __brand: 'SectionRoutes'}
-}
 
-/**
- * Returns the localized slug for a section.
- */
-export function getSectionRoute<Section extends string,
-  Language extends string
->(
-  routes: SectionRoutes<Section, Language>,
-  section: Section,
-  locale: Language
-): string {
-  return routes[section][locale]
-}
+  const getSectionRoute = (section: Section, locale: Language): string =>
+    routes[section][locale]
 
-/**
- * Returns the localized URL for a section.
- */
-export function getSectionURL<
-  Section extends string,
-  Language extends string
->(
-  routes: SectionRoutes<Section, Language>,
-  section: Section,
-  locale: Language
-): string {
-  return `/${locale}/${getSectionRoute(routes, section, locale)}`
-}
+  const getSectionURL = (section: Section, locale: Language): string =>
+    `/${locale}/${getSectionRoute(section, locale)}`
 
-/**
- * Returns the localized URL for a content entry
- */
-export function getEntryURL<
-  Section extends string,
-  Language extends string
->(
-  routes: SectionRoutes<Section, Language>,
-  section: Section,
-  locale: Language,
-  slug: string
-): string {
-  return `${getSectionURL(routes, section, locale)}/${slug}`
+  const getEntryURL = (
+    section: Section,
+    locale: Language,
+    slug: string
+  ): string =>
+    `${getSectionURL(section, locale)}/${slug}`
+
+  return {
+    routes,
+    getSectionRoute,
+    getSectionURL,
+    getEntryURL
+  }
 }
