@@ -69,22 +69,3 @@ export function createTranslationIndex<
   }
   return Object.fromEntries(map)
 }
-
-/**
- * Validates if the provided language is in the list of allowed locales and returns it as a type-safe value.
- * @param lang Language to validate
- * @param allowedLocales Allowed locales defined by caller
- * @returns The validated language code as a type-safe value
- */
-export function langFromString<L extends string>(
-  lang: string | undefined,
-  allowedLocales: readonly L[]
-): L {
-  if (!lang) throw new TypeError(`Invalid language: ${lang}`)
-
-  if (allowedLocales.includes(lang as L)) {
-    return lang as L
-  }
-
-  throw new TypeError(`Invalid language: ${lang}`)
-}

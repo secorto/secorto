@@ -1,6 +1,7 @@
 import { it, expect, describe, vi } from 'vitest'
 
 import { getStaticPathsEntries, type GenericCollectionEntry } from '@secorto/astro-i18n'
+import { createLocales } from '@secorto/i18n-core'
 
 
 describe('getStaticPathsEntries', () => {
@@ -10,7 +11,7 @@ describe('getStaticPathsEntries', () => {
     talk: { es: 'charla/es', en: 'talk/en' }
   }
 
-  const allowedLocales = ['es', 'en'] as const
+  const allowedLocales = createLocales(['es', 'en'] as const)
 
   const rawBlog: GenericCollectionEntry<'blog', { title: string }>[] = [
     { collection: 'blog', id: 'es/post-1', data: { title: 'Post ES' } },

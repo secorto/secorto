@@ -1,4 +1,4 @@
-import { createTranslationIndex, LocalizedEntry, type TranslationIndex } from '@secorto/i18n-core'
+import { createTranslationIndex, Locales, LocalizedEntry, type TranslationIndex } from '@secorto/i18n-core'
 import { adaptToLocalizedEntry, GenericCollectionEntry } from './adapter'
 
 type DetailPath<T, C extends string, L extends string> = {
@@ -20,7 +20,7 @@ export async function getStaticPathsEntries<
 >(
   routes: Record<C, Record<L, string>>,
   fetchCollection: (collection: C) => Promise<GenericCollectionEntry<C, E>[]>,
-  allowedLocales: readonly L[]
+  allowedLocales: Locales<L>
 ): Promise<DetailPath<E, C, L>[]> {
 
   const allPaths: DetailPath<E, C, L>[] = []

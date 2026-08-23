@@ -1,4 +1,4 @@
-import { langFromString, type LocalizedEntry } from '@secorto/i18n-core'
+import { type LocalizedEntry, type Locales } from '@secorto/i18n-core'
 
 export interface GenericCollectionEntry<
   C extends string, 
@@ -11,15 +11,16 @@ export interface GenericCollectionEntry<
 
 /**
  * Extracts the locale and cleanId from an entryId of the form "es/my-post".
- * The allowed locale is passed as a parameter to avoid coupling the domain to Astro's configuration.
- * @param entryId The entryId to extract from (e.g., "es/my-post")
- * @param allowedLocales The list of allowed locales (e.g., ["es", "en"])
- * @returns An object containing the locale and cleanId
- * @throws Error if the entryId is invalid or the locale is not allowed
+ * Locale validation is delegated to the Locales value object.
+ *
+ * @param entryId Raw entry identifier (e.g., "es/my-post")
+ * @param locales Locales value object created via createLocales()
+ * @returns An object containing the validated locale and cleanId
+ * @throws Error if the entryId is malformed or the locale is invalid
  */
 export function extractCleanId<L extends string>(
   entryId: string,
-  allowedLocales: readonly L[]
+  locales: Locales<L>
 ): { locale: L; id: string } {
   if (!entryId) {
     throw new Error('entryId cannot be empty')
@@ -31,7 +32,7 @@ export function extractCleanId<L extends string>(
   }
 
   const rawLocale = entryId.slice(0, firstSlash)
-  const locale = langFromString(rawLocale, allowedLocales)
+  const locale = locales.fromString(rawLocale)
 
   const cleanId = entryId.slice(firstSlash + 1)
 
@@ -55,9 +56,9 @@ export function adaptToLocalizedEntry<
 >(
   // Pasamos C y T para amarrar la colección y el esquema de datos exacto
   entry: GenericCollectionEntry<C, T>, 
-  allowedLocales: readonly L[]
+  locales: Locales<L>
 ): LocalizedEntry<T, C, L> {
-  const { locale, id: cleanId } = extractCleanId(entry.id, allowedLocales);
+  const { locale, id: cleanId } = extractCleanId(entry.id, locales);
   
   return {
     cleanId,

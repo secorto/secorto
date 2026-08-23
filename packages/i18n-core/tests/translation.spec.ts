@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createTranslationIndex, langFromString, LocalizedEntry } from '@secorto/i18n-core'
+import { createTranslationIndex, LocalizedEntry } from '@secorto/i18n-core'
 
 type TestLocales = 'es' | 'en' | 'fr'
 type TestContent = { text: string }
@@ -60,23 +60,5 @@ describe('createTranslationIndex', () => {
     const missingGroup = index['missing-key']
 
     expect(missingGroup).toBeUndefined()
-  })
-})
-
-describe('langFromString', () => {
-  const languages = ['en', 'es', 'fr'] as const
-
-  for (const k of languages) {
-    it(`validates that langFromString returns ${k} for input "${k}"`, () => {
-      expect(langFromString(k, languages)).toBe(k)
-    })
-  }
-
-  it('an invalid value throws an error', () => {
-    expect(() => langFromString('xx', languages)).toThrow('Invalid language: xx')
-  })
-  
-  it('undefined or unsafe values throw an error', () => {
-    expect(() => langFromString(undefined, languages)).toThrow('Invalid language: undefined')
   })
 })

@@ -1,6 +1,7 @@
 import { test, expect, describe } from 'vitest'
 import { extractCleanId } from '@secorto/astro-i18n'
-const allowedLocales = ['es', 'en'] as const
+import { createLocales } from '@secorto/i18n-core'
+const allowedLocales = createLocales(['es', 'en'] as const)
 
 describe('extractCleanId', () => {
   test('removes Spanish locale prefix from entry ID and returns locale', () => {
