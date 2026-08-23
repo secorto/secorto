@@ -39,7 +39,7 @@ export type TranslationIndex<
  * @returns The translation index, grouped by translation key and locale
  * @throws Error if duplicate entries for the same translation key and locale are found
  */
-export function buildTranslationIndex<
+export function createTranslationIndex<
   L extends string,
   E,
   C extends string

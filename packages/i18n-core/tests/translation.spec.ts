@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildTranslationIndex, langFromString, LocalizedEntry } from '@secorto/i18n-core'
+import { createTranslationIndex, langFromString, LocalizedEntry } from '@secorto/i18n-core'
 
 type TestLocales = 'es' | 'en' | 'fr'
 type TestContent = { text: string }
@@ -24,12 +24,12 @@ function createEntry<K extends string>(
   }
 }
 
-describe('buildTranslationIndex', () => {
+describe('createTranslationIndex', () => {
   it('groups entries by translation key and locale', () => {
     const esEntry = createEntry('playwright-guide', 'es')
     const enEntry = createEntry('playwright-guide', 'en')
 
-    const index = buildTranslationIndex([esEntry, enEntry])
+    const index = createTranslationIndex([esEntry, enEntry])
 
     expect(index['playwright-guide'].es).toBe(esEntry)
     expect(index['playwright-guide'].en).toBe(enEntry)
@@ -40,14 +40,14 @@ describe('buildTranslationIndex', () => {
     const entry2 = createEntry('playwright-guide', 'es')
 
     expect(() => 
-      buildTranslationIndex([entry1, entry2])
+      createTranslationIndex([entry1, entry2])
     ).toThrow('Duplicate translation for key "playwright-guide" and locale "es"')
   })
 
   it('supports content available in only one locale', () => {
     const esEntry = createEntry('playwright-guide', 'es')
 
-    const index = buildTranslationIndex([esEntry])
+    const index = createTranslationIndex([esEntry])
 
     expect(index['playwright-guide'].es).toBe(esEntry)
     expect(index['playwright-guide'].en).toBeUndefined()
@@ -55,7 +55,7 @@ describe('buildTranslationIndex', () => {
 
   it('should enforce safe navigation for missing translation keys', () => {
     const entry = createEntry('existing-key', 'es')
-    const index = buildTranslationIndex([entry])
+    const index = createTranslationIndex([entry])
 
     const missingGroup = index['missing-key']
 

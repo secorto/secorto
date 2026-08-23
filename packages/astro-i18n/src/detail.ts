@@ -1,4 +1,4 @@
-import { buildTranslationIndex, LocalizedEntry, type TranslationIndex } from '@secorto/i18n-core'
+import { createTranslationIndex, LocalizedEntry, type TranslationIndex } from '@secorto/i18n-core'
 import { adaptToLocalizedEntry, GenericCollectionEntry } from './adapter'
 
 type DetailPath<T, C extends string, L extends string> = {
@@ -32,7 +32,7 @@ export async function getStaticPathsEntries<
       adaptToLocalizedEntry<E, C, L>(entry, allowedLocales)
     )
 
-    const index = buildTranslationIndex(entries)
+    const index = createTranslationIndex(entries)
 
     for (const entry of entries) {
       allPaths.push({
